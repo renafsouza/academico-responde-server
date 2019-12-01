@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      primaryKey: true,
     },
     score: {
       type: DataTypes.INTEGER,
@@ -19,5 +20,22 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     freezeTableName: true,
   });
+  User.associate = (models) => {
+    User.hasOne(models.Student,{
+      foreignKey: 'user_email',
+    });
+    User.hasOne(models.Professor,{
+      foreignKey: 'user_email',
+    });
+    User.hasOne(models.Admin,{
+      foreignKey: 'user_email',
+    });
+    User.hasOne(models.Moderator,{
+      foreignKey: 'user_email',
+    });
+    User.hasMany(models.Post,{
+      foreignKey: 'user_email',
+    });
+  };
   return User;
 };
