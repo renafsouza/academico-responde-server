@@ -28,14 +28,17 @@ module.exports = (sequelize, DataTypes) => {
     Post.associate = (models) => {
       Post.hasMany(models.Report,{
         foreignKey: 'post_id',
+        onDelete: 'cascade'
     });};
     Post.associate = (models) => {
       Post.hasOne(models.Reply,{
         foreignKey: 'post_id',
+        onDelete: 'cascade'
     });};
     Post.associate = (models) => {
       Post.hasOne(models.Question,{
         foreignKey: 'post_id',
+        onDelete: 'cascade'
     })};
     return Post;
   };

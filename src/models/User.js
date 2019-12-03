@@ -23,18 +23,23 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasOne(models.Student,{
       foreignKey: 'user_email',
+      onDelete: 'cascade'
     });
     User.hasOne(models.Professor,{
       foreignKey: 'user_email',
+      onDelete: 'cascade'
     });
     User.hasOne(models.Admin,{
       foreignKey: 'user_email',
+      onDelete: 'cascade'
     });
     User.hasOne(models.Moderator,{
       foreignKey: 'user_email',
+      onDelete: 'cascade'
     });
     User.hasMany(models.Post,{
       foreignKey: 'user_email',
+      onDelete: 'cascade'
     });
   };
   return User;

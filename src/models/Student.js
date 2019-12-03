@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
       userEmail: {
         type: DataTypes.STRING,
         field: 'user_email',
-        allowNull: false,
       },
       matricula: {
         primaryKey: true,
