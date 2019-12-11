@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     });
     Professor.associate = (models) => {
-      Professor.belongsTo(models.User,{
+      models.Professor.belongsTo(models.User,{
         foreignKey: 'user_email',
     });};
     return Professor;

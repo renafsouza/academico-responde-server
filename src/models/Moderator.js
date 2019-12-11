@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     });
     Moderator.associate = (models) => {
-      Moderator.belongsTo(models.User,{
+      models.Moderator.belongsTo(models.User,{
         foreignKey: 'user_email',
     });};
     return Moderator; 

@@ -1,28 +1,28 @@
 const {
-    Student,User
+    Professor,User
   } = require('../models');
 
 module.exports.list = async (req, res) => {
     try {
-      const students = await Student.findAll({
+      const professors = await Professor.findAll({
         include: {
           model: User,
         },
       });
-      return res.status(200).json(students);
+      return res.status(200).json(professors);
     } catch (error) {
       return res.status(400).json(error);
     }
   };
-module.exports.createStudent = async (req,res)=>{
+module.exports.createProfessor = async (req,res)=>{
     try{
         data = req.body;
         const user = await User.findOne({
           where: { email:req.params.email },
         });
-        let student;
+        let professor;
         if (user) {
-            student = await Student.create({
+            professor = await Professor.create({
               userEmail: user.get("email"),
               ...data,
             });
@@ -30,20 +30,20 @@ module.exports.createStudent = async (req,res)=>{
             return res.status(200).json({
                 msg: 'User not found',
                 created: false,
-                data: {student},
+                data: {professor},
             });
         }
-        if(student)
+        if(professor)
             return res.status(200).json({
-                msg: 'Student created with success',
+                msg: 'Professor created with success',
                 created: true,
-                data: student,
+                data: professor,
             });
         else
             return res.status(500).json({
-                msg: 'Student not created',
+                msg: 'Professor not created',
                 created: false,
-                data: student,
+                data: professor,
             });
     }catch(e){
         return res.status(500).json({
@@ -53,9 +53,9 @@ module.exports.createStudent = async (req,res)=>{
         });
     }
 }
-module.exports.deleteStudent = async (req,res)=>{
+module.exports.deleteProfessor = async (req,res)=>{
     try{
-        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Student }] });
+        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Professor }] });
         if(!user){
             return res.status(505).json({
                 msg: "User not found",
@@ -63,8 +63,8 @@ module.exports.deleteStudent = async (req,res)=>{
                 data: {user},
             });
         }
-        let removed = await Student.destroy({
-            where:{matricula:user.Student.matricula}
+        let removed = await Professor.destroy({
+            where:{matricula:user.Professor.matricula}
         });
         if (!removed) {
             return res.status(200).json({
@@ -86,9 +86,9 @@ module.exports.deleteStudent = async (req,res)=>{
         });
     }
 }
-module.exports.updateStudent = async (req,res)=>{
+module.exports.updateProfessor = async (req,res)=>{
     try{
-        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Student }] });
+        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Professor }] });
         if(!user){
             return res.status(505).json({
                 msg: "User not found",
@@ -99,14 +99,14 @@ module.exports.updateStudent = async (req,res)=>{
         const update_info = {
         ...req.body,
         };
-        let updated = await Student.update(
+        let updated = await Professor.update(
             update_info,
             { // where
-                where:{matricula: user.Student.matricula}
+                where:{matricula: user.Professor.matricula}
             },
         );
         if(updated)
-            return res.status(403).json({
+            return res.status(202).json({
                 msg: 'Updated with success',
                 created: true,
                 data: updated,

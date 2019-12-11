@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define('Post', {
+    const Report = sequelize.define('Report', {
       id: {
         type: DataTypes.STRING,
         primaryKey:true,
@@ -10,26 +10,25 @@ module.exports = (sequelize, DataTypes) => {
         field: 'user_email',
         allowNull: false,
       },
-      idPost: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        field: 'id_post',
-      },
-      dateCreated: {
+      postId: {
         type: DataTypes.STRING,
+        field: 'post_id',
         allowNull: false,
-        field: 'dateCreated',
-      }
+      },
+      reason: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     }, {
       freezeTableName: true,
     });
-    Post.associate = (models) => {
-      Post.belongsTo(models.User,{
+    Report.associate = (models) => {
+      Report.belongsTo(models.User,{
         foreignKey: 'user_email',
     });};
-    Post.associate = (models) => {
-      Post.belongsTo(models.Post,{
-        foreignKey: 'id_post',
+    Report.associate = (models) => {
+      Report.belongsTo(models.Report,{
+        foreignKey: 'post_id',
     });};
-    return Post;
+    return Report;
   };

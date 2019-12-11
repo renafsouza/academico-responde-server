@@ -6,8 +6,14 @@ const {
   User,
 } = require('./models');
 var app = express()
-var cors = require('cors')
-app.use(cors())
+const cors = require('cors');
+
+const corsOptions = {
+  origin: [
+    'http://localhost:3000'
+  ],
+};
+app.use(cors(corsOptions));
 
 const routes = require("./routes.js");
 app.use(bodyParser.urlencoded({ extended: true }));

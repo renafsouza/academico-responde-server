@@ -1,49 +1,64 @@
 const {
-    Student,User
+    Report,Post
   } = require('../models');
 
-module.exports.list = async (req, res) => {
+module.exports.listAll = async (req, res) => {
     try {
-      const students = await Student.findAll({
-        include: {
-          model: User,
-        },
-      });
-      return res.status(200).json(students);
+      const reports = await Report.findAll();
+      return res.status(200).json(reports);
     } catch (error) {
       return res.status(400).json(error);
     }
-  };
-module.exports.createStudent = async (req,res)=>{
+};
+module.exports.list = async (req, res) => {
+    try {
+        const reports = await Report.findAll({
+            where:{
+                postId:req.params.postid,
+                userEmail:req.params.email
+            }
+        });
+        return res.status(200).json(reports);
+    } catch (error) {
+        return res.status(400).json(error);
+    }
+};
+module.exports.createReport = async (req,res)=>{
     try{
         data = req.body;
-        const user = await User.findOne({
-          where: { email:req.params.email },
+        const post = await Post.findOne({
+            where: { 
+                id:req.body.postId,
+                userEmail:req.params.email
+            },
         });
-        let student;
-        if (user) {
-            student = await Student.create({
-              userEmail: user.get("email"),
-              ...data,
+        console.log("awdadwad")
+        let report;
+        if (post) {
+            report = await Report.create({
+                id: req.params.id,
+                postId: post.get("id"),
+                userEmail:req.params.email,
+                ...data,
             });
         }else{
             return res.status(200).json({
-                msg: 'User not found',
+                msg: 'Post not found',
                 created: false,
-                data: {student},
+                data: {report},
             });
         }
-        if(student)
+        if(report)
             return res.status(200).json({
-                msg: 'Student created with success',
+                msg: 'Report created with success',
                 created: true,
-                data: student,
+                data: report,
             });
         else
             return res.status(500).json({
-                msg: 'Student not created',
+                msg: 'Report not created',
                 created: false,
-                data: student,
+                data: report,
             });
     }catch(e){
         return res.status(500).json({
@@ -53,18 +68,19 @@ module.exports.createStudent = async (req,res)=>{
         });
     }
 }
-module.exports.deleteStudent = async (req,res)=>{
+// TODO
+module.exports.deleteReport = async (req,res)=>{
     try{
-        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Student }] });
-        if(!user){
+        const post = await Post.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Report }] });
+        if(!post){
             return res.status(505).json({
-                msg: "User not found",
+                msg: "Post not found",
                 created: false,
-                data: {user},
+                data: {post},
             });
         }
-        let removed = await Student.destroy({
-            where:{matricula:user.Student.matricula}
+        let removed = await Report.destroy({
+            where:{id:post.Report.id}
         });
         if (!removed) {
             return res.status(200).json({
@@ -86,23 +102,24 @@ module.exports.deleteStudent = async (req,res)=>{
         });
     }
 }
-module.exports.updateStudent = async (req,res)=>{
+// TODO
+module.exports.updateReport = async (req,res)=>{
     try{
-        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Student }] });
-        if(!user){
+        const post = await Post.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Report }] });
+        if(!post){
             return res.status(505).json({
-                msg: "User not found",
+                msg: "Post not found",
                 created: false,
-                data: {user},
+                data: {post},
             });
         }
         const update_info = {
         ...req.body,
         };
-        let updated = await Student.update(
+        let updated = await Report.update(
             update_info,
             { // where
-                where:{matricula: user.Student.matricula}
+                where:{id: post.Report.id}
             },
         );
         if(updated)

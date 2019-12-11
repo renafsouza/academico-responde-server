@@ -10,11 +10,15 @@ module.exports = (sequelize, DataTypes) => {
         field: 'user_email',
         allowNull: false
       },
+      perm: {
+        type: DataTypes.STRING(3).BINARY,
+        allowNull: false
+      },
     }, {
       freezeTableName: true,
     });
     Admin.associate = (models) => {
-      Admin.belongsTo(models.User,{
+      models.Admin.belongsTo(models.User,{
         foreignKey: 'user_email',
     });};
     return Admin;

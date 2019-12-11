@@ -23,12 +23,14 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     });
     Reply.associate = (models) => {
-      Reply.belongsTo(models.Post,{
+      models.Reply.belongsTo(models.Post,{
         foreignKey: 'post_id',
+        onDelete: 'cascade'
     });}
     Reply.associate = (models) => {
-      Reply.belongsTo(models.Question,{
+      models.Reply.belongsTo(models.Question,{
         foreignKey: 'question_id',
+        onDelete: 'cascade'
     });};
     return Reply;
   };

@@ -1,28 +1,28 @@
 const {
-    Student,User
+    Mod,User
   } = require('../models');
 
 module.exports.list = async (req, res) => {
     try {
-      const students = await Student.findAll({
+      const mods = await Mod.findAll({
         include: {
           model: User,
         },
       });
-      return res.status(200).json(students);
+      return res.status(200).json(mods);
     } catch (error) {
       return res.status(400).json(error);
     }
   };
-module.exports.createStudent = async (req,res)=>{
+module.exports.createMod = async (req,res)=>{
     try{
         data = req.body;
         const user = await User.findOne({
           where: { email:req.params.email },
         });
-        let student;
+        let mod;
         if (user) {
-            student = await Student.create({
+            mod = await Mod.create({
               userEmail: user.get("email"),
               ...data,
             });
@@ -30,20 +30,20 @@ module.exports.createStudent = async (req,res)=>{
             return res.status(200).json({
                 msg: 'User not found',
                 created: false,
-                data: {student},
+                data: {mod},
             });
         }
-        if(student)
+        if(mod)
             return res.status(200).json({
-                msg: 'Student created with success',
+                msg: 'Mod created with success',
                 created: true,
-                data: student,
+                data: mod,
             });
         else
             return res.status(500).json({
-                msg: 'Student not created',
+                msg: 'Mod not created',
                 created: false,
-                data: student,
+                data: mod,
             });
     }catch(e){
         return res.status(500).json({
@@ -53,9 +53,9 @@ module.exports.createStudent = async (req,res)=>{
         });
     }
 }
-module.exports.deleteStudent = async (req,res)=>{
+module.exports.deleteMod = async (req,res)=>{
     try{
-        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Student }] });
+        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Mod }] });
         if(!user){
             return res.status(505).json({
                 msg: "User not found",
@@ -63,8 +63,8 @@ module.exports.deleteStudent = async (req,res)=>{
                 data: {user},
             });
         }
-        let removed = await Student.destroy({
-            where:{matricula:user.Student.matricula}
+        let removed = await Mod.destroy({
+            where:{id:user.Mod.id}
         });
         if (!removed) {
             return res.status(200).json({
@@ -86,9 +86,9 @@ module.exports.deleteStudent = async (req,res)=>{
         });
     }
 }
-module.exports.updateStudent = async (req,res)=>{
+module.exports.updateMod = async (req,res)=>{
     try{
-        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Student }] });
+        const user = await User.findOne({ where:{email:req.params.email}, attributes: ['email'], include: [{ model: Mod }] });
         if(!user){
             return res.status(505).json({
                 msg: "User not found",
@@ -99,10 +99,10 @@ module.exports.updateStudent = async (req,res)=>{
         const update_info = {
         ...req.body,
         };
-        let updated = await Student.update(
+        let updated = await Mod.update(
             update_info,
             { // where
-                where:{matricula: user.Student.matricula}
+                where:{id: user.Mod.id}
             },
         );
         if(updated)

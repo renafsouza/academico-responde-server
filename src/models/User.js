@@ -1,13 +1,17 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    username: {
-      type: DataTypes.STRING(24),
-      allowNull: false
-    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
+    },
+    username: {
+      type: DataTypes.STRING(24),
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     score: {
       type: DataTypes.INTEGER,
@@ -21,23 +25,23 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
   });
   User.associate = (models) => {
-    User.hasOne(models.Student,{
+    models.User.hasOne(models.Student,{
       foreignKey: 'user_email',
       onDelete: 'cascade'
     });
-    User.hasOne(models.Professor,{
+    models.User.hasOne(models.Professor,{
       foreignKey: 'user_email',
       onDelete: 'cascade'
     });
-    User.hasOne(models.Admin,{
+    models.User.hasOne(models.Admin,{
       foreignKey: 'user_email',
       onDelete: 'cascade'
     });
-    User.hasOne(models.Moderator,{
+    models.User.hasOne(models.Moderator,{
       foreignKey: 'user_email',
       onDelete: 'cascade'
     });
-    User.hasMany(models.Post,{
+    models.User.hasMany(models.Post,{
       foreignKey: 'user_email',
       onDelete: 'cascade'
     });

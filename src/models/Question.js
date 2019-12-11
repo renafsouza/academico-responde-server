@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.STRING,
         primaryKey:true,
-        field: 'question_id',
         allowNull: false,
       },
       postId: {
@@ -23,12 +22,14 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     });
     Question.associate = (models) => {
-      Question.belongsTo(models.Post,{
+      models.Question.belongsTo(models.Post,{
         foreignKey: 'post_id',
-    });
+        onDelete: 'cascade'
+    })};
     Question.associate = (models) => {
-        Question.hasMany(models.Reply,{
+      models.Question.hasMany(models.Reply,{
         foreignKey: 'question_id',
-    })};};
+        onDelete: 'cascade'
+    })};
     return Question;
   };

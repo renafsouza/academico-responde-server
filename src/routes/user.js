@@ -1,6 +1,45 @@
 const {
-    User
+    User, Student, Moderator, Professor, Admin
   } = require('../models');
+  module.exports.list = async (req, res) => {
+    try {
+        const users = await User.findAll({
+            include: {
+            model: User,
+            },
+        });
+        return res.status(200).json(users);
+    } catch (error) {
+        return res.status(400).json(error);
+    }
+};
+module.exports.getUser = async (req, res) => {
+    try {
+        const user = await User.findOne({ 
+            where:{email:req.params.email,password:req.body.password}, 
+            include: [
+                { model: Student },
+                { model: Admin },
+                { model: Professor },
+                { model: Moderator }
+            ] 
+        });
+        if(user)
+            return res.status(200).json({
+                created:true,
+                data:user
+            });
+            return res.status(400).json({
+                created:false,
+                data:user
+            });
+    } catch (error) {
+        return res.status(500).json({
+            created:false,
+            data:error
+        });
+    }
+};
 module.exports.createUser = async (req,res)=>{
     try{
         const [user, created] = await User.findOrCreate({
@@ -10,7 +49,7 @@ module.exports.createUser = async (req,res)=>{
           },
         });
         if(created)
-            return res.status(402).json({
+            return res.status(200).json({
                 msg: 'Created with sucess',
                 created: true,
                 data: user,

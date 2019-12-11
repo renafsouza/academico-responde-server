@@ -22,7 +22,7 @@ fs.readdirSync(__dirname)
     const model = sequelize.import(path.join(__dirname, file));
     db[model.name] = model;
     (async ()=>{
-        await model.sync({ force: true });  
+        // await model.sync({ force: true });  
     })();
 });
 
